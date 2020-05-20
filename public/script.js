@@ -12,5 +12,11 @@ plant data table:
 stretch goals
 place furniture, rotate objects
 option to identify plants by picture, api
+notifications, scheduling, calendar
+
+
+layout
+zoomable canvas
+
 
 */
