@@ -6,7 +6,7 @@ place plants
 pull plant data from api
 auto complete plant names
 plant data table:
-  name, acquired, 
+  name, water frequency, sunlight pref, acquired
 
 
 stretch goals
