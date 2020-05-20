@@ -1,6 +1,6 @@
 /*
 
-plant planner
+plant planner:
 draw plan of space
 place plants
 pull plant data from api
@@ -9,14 +9,23 @@ plant data table:
   name, water frequency, sunlight pref, acquired
 
 
-stretch goals
+stretch goals:
 place furniture, rotate objects
 option to identify plants by picture, api
 notifications, scheduling, calendar
 
 
-layout
+layout:
 zoomable canvas
+find bounds of drawn layout
+place datatable to the right
+place search bar to the top
+place tools to the top
+big playful controls with transitions
+
+tools:
+layout
+plant
 
 
 */
