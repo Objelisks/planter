@@ -13,6 +13,7 @@ stretch goals:
 place furniture, rotate objects
 option to identify plants by picture, api
 notifications, scheduling, calendar
+wiggly animated borders
 
 
 layout:
@@ -28,4 +29,12 @@ layout
 plant
 
 
+d3:
+path
+zoomable
+dragging
+selection
+
 */
+
+
