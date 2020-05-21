@@ -1,3 +1,4 @@
+/* globals d3 */
 /*
 
 plant planner:
@@ -42,3 +43,6 @@ const options = {
   toolmode: 'plan',
 }
 
+d3.select('.zone').on('click', () => {
+  
+})
