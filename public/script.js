@@ -43,6 +43,8 @@ const options = {
   toolmode: 'plan',
 }
 
+const walls = d3.selectAll('.wall')
+
 d3.select('.zone').on('click', () => {
   
 })
