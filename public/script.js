@@ -45,6 +45,6 @@ const options = {
 
 const walls = d3.selectAll('.wall')
 
-d3.select('.zone').on('click', () => {
-  
+d3.select('.zone').on('click', (event) => {
+  walls.insert({x: event.x, y: event.y})
 })
