@@ -1,4 +1,4 @@
-/* globals d3 */
+/* globals d3 simplify */
 /*
 
 plant planner:
@@ -38,9 +38,6 @@ selection
 
 */
 
-import * as simp from './simplify.js'
-console.log(simp)
-
 const makeLine = d3.line()
 
 const state = {
@@ -73,7 +70,7 @@ zone.on('mousedown', () => {
 })
 .on('mouseup', () => {
   zone.on('mousemove.draw', null)
-  const simplified = simplify(walls[walls.length-1])
+  const simplified = simplify(walls[walls.length-1], 1)
   walls[walls.length-1] = simplified
   renderWalls()
 })
