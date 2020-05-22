@@ -44,22 +44,24 @@ const state = {
   toolmode: 'plan',
 }
 
-const svg = d3.select('.zone').append('svg')
+const walls = []
+
+const svg = d3.select('.zone')
+  .append('svg')
     .attr("width", 800)
     .attr("height", 600)
 
 svg
-  .data({ walls: [] })
   .on('mousedown', (data) => {
-    data.walls.push([d3.mouse(this)])
+    walls.push([d3.mouse(this)])
     svg.on('mousemove.draw', data => {
-      data.walls[data.walls.length-1].push(d3.mouse(this))
+      walls[walls.length-1].push(d3.mouse(this))
     })
   })
   .on('mouseup', data => {
     svg.on('mousemove.draw', null)
   })
-  .selectAll('.wall').data(data => data.walls).join(
+  .selectAll('.wall').data(walls).join(
     enter => enter.append('path').classed('wall', true),
-    update => data => update.attr('d', d3.line()),
+    update => data => {console.log(data); update.attr('d', d3.line(data)) },
     exit => exit.remove())
