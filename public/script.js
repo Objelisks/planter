@@ -38,26 +38,22 @@ selection
 
 */
 
+const makeLine = d3.path()
+
 const state = {
   toolmode: 'plan',
-  active: false,
-  walls: [],
 }
 
 d3.select('.zone')
-  .on('mousedown', (event) => {
-    state.active = true
-    d3.select('.zone').append('div')
-      .classed('wall', true)
-      .classed('active', true)
+  .data({ walls: [] })
+  .on('mousedown', (data) => {
+  console.log('etc', data)
+    data.walls.push([d3.mouse(this)])
   }) 
-  .on('mousemove', (event) => {
-    d3.select('.active')
+  .on('mousemove', (data) => {
+    data.walls[data.walls.length-1].push(d3.mouse(this))
   })
-  .on('mouseup', (event) => {
-    d3.select('.active').classed('active', false)
-  })
-  .selectAll('.wall').data(state.walls).join(
+  .selectAll('.wall').data(data => data.walls).join(
     enter => enter.append('div').classed('wall', true),
-    update => update.attr('path', update),
+    update => data => update.attr('path', makeLine(data)),
     exit => exit.remove())
