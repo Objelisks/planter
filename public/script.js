@@ -38,13 +38,17 @@ selection
 
 */
 
-
-const options = {
+const state = {
   toolmode: 'plan',
+  active: false,
 }
 
-const walls = d3.selectAll('.wall')
-
-d3.select('.zone').on('click', (event) => {
-  walls.insert({x: event.x, y: event.y})
-})
+d3.select('.zone')
+  .on('mousedown', (event) => {
+    state.active = true
+  }) 
+  .on('mousemove', (event) => {
+    if(state.active) {
+      
+    }
+  })
