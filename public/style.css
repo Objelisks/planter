@@ -28,3 +28,10 @@ footer {
   min-height: 600px;
   border: 1px solid black;
 }
+
+.wall {
+  fill: none;
+  stroke: black;
+  stroke-width: 4px;
+  stroke-linecap: round;
+}

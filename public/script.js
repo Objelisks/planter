@@ -70,20 +70,32 @@ const state = {
 
 const walls = [[[10, 10], [10, 20], [20, 10]]]
 
-const svg = d3.select('.zone').append('svg').attr('width', 800).attr('height', 600)
+const zone = d3.select('.zone')
+const svg = zone.append('svg').attr('width', 800).attr('height', 600)
 
-svg
-  .selectAll('.wall')
-  .data(walls)
-  .join('path')
-  .attr('d', d => makeLine(d))
+const renderWalls = () =>
+  svg
+    .selectAll('.wall')
+    .data(walls)
+    .join(
+      enter => enter.append('path').classed('wall', true).attr('d', d => makeLine(d)),
+      update => update.attr('d', d => makeLine(d)),
+      exit => exit.remove()
+    )
+  
 
-svg.on('mousedown', () => {
+zone.on('mousedown', () => {
+  console.log('mousedown', walls)
   walls.push([])
-  svg.on('mousemove.draw', () => {
-    walls[walls.length-1].push(d3.mouse(svg))
+  zone.on('mousemove.draw', () => {
+    walls[walls.length-1].push(d3.mouse(zone.node()))
+    renderWalls()
   })
+  renderWalls()
 })
 .on('mouseup', () => {
-  
+  zone.on('mousemove.draw', null)
+  renderWalls()
 })
+
+renderWalls()
