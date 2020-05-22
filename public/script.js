@@ -56,7 +56,8 @@ const renderWalls = () =>
       exit => exit.remove())
 
 // setup events for wall drawing
-zone.on('mousedown.draw', () => {
+
+const ondraw = () => {
   walls.push([])
   
   zone.on('mousemove.draw', () => {
@@ -66,6 +67,7 @@ zone.on('mousedown.draw', () => {
   
   renderWalls()
 })
+zone.on('mousedown.draw', ondraw)
 .on('mouseup.draw', () => {
   zone.on('mousemove.draw', null)
   const simplified = simplify(walls[walls.length-1], 1)
