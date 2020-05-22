@@ -26,4 +26,5 @@ footer {
 .zone {
   min-width: 600px;
   min-height: 600px;
+  border: 1px solid black;
 }
