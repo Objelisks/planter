@@ -38,31 +38,52 @@ selection
 
 */
 
-const makeLine = d3.path()
+const makeLine = d3.line()
 
 const state = {
   toolmode: 'plan',
 }
 
-const walls = []
+// const walls = []
 
-const svg = d3.select('.zone')
-  .append('svg')
-    .attr("width", 800)
-    .attr("height", 600)
+// const svg = d3.select('.zone')
+//   .append('svg')
+//     .attr("width", 800)
+//     .attr("height", 600)
+
+// svg
+//   .on('mousedown', (data) => {
+//     console.log('wtc', walls)
+//     walls.push([d3.mouse(svg)])
+//     svg.on('mousemove.draw', data => {
+//       walls[walls.length-1].push(d3.mouse(svg))
+//     })
+//   })
+//   .on('mouseup', data => {
+//     svg.on('mousemove.draw', null)
+//   })
+//   .selectAll('.wall').data(walls).join(
+//     enter => enter.append('path').classed('wall', true),
+//     update => data => {console.log(data); update.attr('d', d3.line(data)) },
+//     exit => exit.remove())
+
+
+const walls = [[[10, 10], [10, 20], [20, 10]]]
+
+const svg = d3.select('.zone').append('svg').attr('width', 800).attr('height', 600)
 
 svg
-  .on('mousedown', (data) => {
-    console.log('wtc', walls)
-    walls.push([d3.mouse(svg)])
-    svg.on('mousemove.draw', data => {
-      walls[walls.length-1].push(d3.mouse(svg))
-    })
+  .selectAll('.wall')
+  .data(walls)
+  .join('path')
+  .attr('d', d => makeLine(d))
+
+svg.on('mousedown', () => {
+  walls.push([])
+  svg.on('mousemove.draw', () => {
+    walls[walls.length-1].push(d3.mouse(svg))
   })
-  .on('mouseup', data => {
-    svg.on('mousemove.draw', null)
-  })
-  .selectAll('.wall').data(walls).join(
-    enter => enter.append('path').classed('wall', true),
-    update => data => {console.log(data); update.attr('d', d3.line(data)) },
-    exit => exit.remove())
+})
+.on('mouseup', () => {
+  
+})
