@@ -43,9 +43,12 @@ const state = {
   active: false,
 }
 
+const walls = d3.selectAll('.wall')
+
 d3.select('.zone')
   .on('mousedown', (event) => {
     state.active = true
+    walls.append('div').classed('wall', true)
   }) 
   .on('mousemove', (event) => {
     if(state.active) {
