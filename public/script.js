@@ -54,9 +54,9 @@ const renderWalls = () =>
       enter => enter.append('path').classed('wall', true).attr('d', d => line(d)),
       update => update.attr('d', d => line(d)),
       exit => exit.remove())
-  
+
 // setup events for wall drawing
-zone.on('mousedown', () => {
+zone.on('mousedown.draw', () => {
   walls.push([])
   
   zone.on('mousemove.draw', () => {
@@ -66,7 +66,7 @@ zone.on('mousedown', () => {
   
   renderWalls()
 })
-.on('mouseup', () => {
+.on('mouseup.draw', () => {
   zone.on('mousemove.draw', null)
   const simplified = simplify(walls[walls.length-1], 1)
   walls[walls.length-1] = simplified
