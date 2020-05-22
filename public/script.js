@@ -41,6 +41,7 @@ selection
 const state = {
   toolmode: 'plan',
   active: false,
+  walls: [],
 }
 
 d3.select('.zone')
@@ -56,3 +57,7 @@ d3.select('.zone')
   .on('mouseup', (event) => {
     d3.select('.active').classed('active', false)
   })
+  .selectAll('.wall').data(state.walls).join(
+    enter => enter.append('div').classed('wall', true),
+    update => update.attr('path', update),
+    exit => exit.remove())
