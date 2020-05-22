@@ -66,8 +66,9 @@ const ondraw = () => {
   })
   
   renderWalls()
-})
+}sd
 zone.on('mousedown.draw', ondraw)
+zone.on('touchstart.draw', ondraw)
 .on('mouseup.draw', () => {
   zone.on('mousemove.draw', null)
   const simplified = simplify(walls[walls.length-1], 1)
