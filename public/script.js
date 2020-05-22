@@ -53,9 +53,10 @@ const svg = d3.select('.zone')
 
 svg
   .on('mousedown', (data) => {
-    walls.push([d3.mouse(this)])
+    console.log('wtc', walls)
+    walls.push([d3.mouse(svg)])
     svg.on('mousemove.draw', data => {
-      walls[walls.length-1].push(d3.mouse(this))
+      walls[walls.length-1].push(d3.mouse(svg))
     })
   })
   .on('mouseup', data => {
