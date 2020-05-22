@@ -38,26 +38,24 @@ selection
 
 */
 
-const makeLine = d3.line()
-
-const state = {
-  toolmode: 'plan',
-}
-
-const walls = []
+const line = d3.line()
 
 const zone = d3.select('.zone')
 const svg = zone.append('svg').attr('width', 800).attr('height', 600)
 
+const walls = []
+
+// refresh walls from data
 const renderWalls = () =>
   svg
     .selectAll('.wall')
     .data(walls)
     .join(
-      enter => enter.append('path').classed('wall', true).attr('d', d => makeLine(d)),
-      update => update.attr('d', d => makeLine(d)),
+      enter => enter.append('path').classed('wall', true).attr('d', d => line(d)),
+      update => update.attr('d', d => line(d)),
       exit => exit.remove())
   
+// setup events for wall drawing
 zone.on('mousedown', () => {
   walls.push([])
   
@@ -75,4 +73,6 @@ zone.on('mousedown', () => {
   renderWalls()
 })
 
+
+// draw everything on initial render
 renderWalls()
