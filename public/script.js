@@ -40,11 +40,11 @@ selection
 
 const line = d3.line()
 
+
 const zone = d3.select('.zone')
-const svg = zone.append('svg')
-.attr("preserveAspectRatio", "xMinYMin meet")
-  .attr("viewBox", "0 0 600 600")
-  .classed("svg-content", true)
+let svg = zone.append('svg')
+  .attr('width', window.innerWidth)
+  .attr('height', window.innerHeight)
 
 const walls = []
 
@@ -91,3 +91,11 @@ zone.on('mouseup.draw touchend.draw mouseleave.draw touchleave.draw', onend)
 
 // draw everything on initial render
 renderWalls()
+
+const resize = () => {
+  svg = zone.append('svg')
+    .attr('width', window.innerWidth)
+    .attr('height', window.innerHeight)
+  renderWalls()
+}
+window.addEventListener('resize', resize)
