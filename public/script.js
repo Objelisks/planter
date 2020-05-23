@@ -68,20 +68,20 @@ const ondraw = (type) => () => {
   walls.push([])
   
   zone.on(`${type}.draw`, () => {
-    console.log('boop', d3.event.type, d3.clientPoint(zone.node(), d3.event))
-    walls[walls.length-1].push(d3.clientPoint(zone.node(), d3.event))
+    const point = d3.event.type.includes('mouse') ? d3.mouse(zone.node()) : d3.touches(zone.node())[0]
+    walls[walls.length-1].push(point)
     renderWalls()
   })
   
   renderWalls()
 }
 const onend = () => {
-  zone.on('.draw', null) // clear move listener
+  zone.on('mousemove.draw touchmove.draw', null) // clear move listener
   const simplified = simplify(walls[walls.length-1], 1)
   walls[walls.length-1] = simplified
   renderWalls()
 }
-zone.on('mousedown.draw touchstart.draw', ondraw('mousemove'))
+zone.on('mousedown.draw', ondraw('mousemove'))
 zone.on('touchstart.draw', ondraw('touchmove'))
 zone.on('mouseup.draw touchend.draw mouseleave.draw touchleave.draw', onend)
 
