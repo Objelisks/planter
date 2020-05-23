@@ -41,7 +41,10 @@ selection
 const line = d3.line()
 
 const zone = d3.select('.zone')
-const svg = zone.append('svg').attr('width', 800).attr('height', 600)
+const svg = zone.append('svg')
+.attr("preserveAspectRatio", "xMinYMin meet")
+  .attr("viewBox", "0 0 600 600")
+  .classed("svg-content", true)
 
 const walls = []
 
