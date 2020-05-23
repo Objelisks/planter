@@ -45,6 +45,8 @@ const svg = zone.append('svg').attr('width', 800).attr('height', 600)
 
 const walls = []
 
+const targetPoint = () => d3.event.type === 'mouse' ? d3.mouse(target)
+
 // refresh walls from data
 const renderWalls = () =>
   svg
@@ -56,7 +58,6 @@ const renderWalls = () =>
       exit => exit.remove())
 
 // setup events for wall drawing
-
 const ondraw = (type) => {
   walls.push([])
   
@@ -67,15 +68,18 @@ const ondraw = (type) => {
   
   renderWalls()
 }
-zone.on('mousedown.draw', ondraw('mousemove'))
-zone.on('touchstart.draw', ondraw('touchmove'))
-
-zone.on('mouseup.draw', () => {
-  zone.on('mousemove.draw', null)
+const onend = (type) => {
+  zone.on(`${type}.draw`, null) // clear move listener
   const simplified = simplify(walls[walls.length-1], 1)
   walls[walls.length-1] = simplified
   renderWalls()
-})
+}
+zone.on('mousedown.draw', ondraw('mousemove'))
+zone.on('touchstart.draw', ondraw('touchmove'))
+zone.on('mouseup.draw', onend('mousemove'))
+zone.on('touchend.draw', onend('touchmove'))
+zone.on('mouseleave.draw', onend('mousemove'))
+zone.on('touchend.draw', onend('touchmove'))
 
 
 // draw everything on initial render
