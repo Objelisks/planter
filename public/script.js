@@ -94,13 +94,16 @@ const wallPage = {
     zone.on('mouseup.draw touchend.draw mouseleave.draw touchleave.draw', onend)
   },
   render: () => {
-    
+    renderWalls()
   },
   unload: () => {
     zone.on('.draw', null)
   }
 }
 
+const pages = [wallPage]
+const pageIndex = 0
+const activePage = () => pages[pageIndex]
 
 const resize = () => {
   zone.selectAll('svg').remove()
@@ -113,3 +116,6 @@ const resize = () => {
 }
 window.addEventListener('resize', resize)
 resize()
+
+
+page.load()
