@@ -37,15 +37,13 @@ dragging
 selection
 
 */
-
+w
 const line = d3.line()
 
 const zone = d3.select('.zone')
 const svg = zone.append('svg').attr('width', 800).attr('height', 600)
 
 const walls = []
-
-const targetPoint = () => d3.event.type === 'mouse' ? d3.mouse(target)
 
 // refresh walls from data
 const renderWalls = () =>
@@ -62,7 +60,7 @@ const ondraw = (type) => {
   walls.push([])
   
   zone.on(`${type}.draw`, () => {
-    walls[walls.length-1].push(d3.mouse(zone.node()))
+    walls[walls.length-1].push(d3.clientPoint(zone.node(), d3.event))
     renderWalls()
   })
   
