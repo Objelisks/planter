@@ -38,9 +38,9 @@ selection
 
 */
 
+const pages = []
+
 const line = d3.line()
-
-
 const zone = d3.select('.zone')
 let svg
 
