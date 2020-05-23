@@ -101,7 +101,7 @@ const wallPage = {
 }
 
 const pages = [wallPage]
-const pageIndex = 0
+let pageIndex = 0
 const activePage = () => pages[pageIndex]
 
 const resize = () => {
@@ -116,5 +116,15 @@ const resize = () => {
 window.addEventListener('resize', resize)
 resize()
 
-activePage().load()
-activePage().render()
+const setPage = (index) => {
+  if(activePage()) {
+    activePage().unload()
+  }
+  pageIndex = index
+  if(activePage()) {
+    activePage().load()
+    activePage().render()
+  }
+}
+
+setPage(0)
