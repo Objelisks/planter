@@ -38,8 +38,6 @@ selection
 
 */
 
-const pages = ['intro', 'draw', 'plant', 'view']
-
 const line = d3.line()
 const zone = d3.select('.zone')
 let svg
@@ -117,5 +115,6 @@ const resize = () => {
 window.addEventListener('resize', resize)
 resize()
 
-
-page.load()
+zone
+  .data(pageIndex)
+  .join()
