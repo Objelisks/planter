@@ -46,11 +46,11 @@ const svg = zone.append('svg').attr('width', 800).attr('height', 600)
 const walls = []
 
 // ignore default touch behavior
-var touchEvents = ['touchstart', 'touchmove', 'touchend']
+const touchEvents = ['touchstart', 'touchmove', 'touchend']
 touchEvents.forEach((eventName) => {
   document.body.addEventListener(eventName, (e) => {
     e.preventDefault()
-  }); 
+  })
 })
 
 // refresh walls from data
@@ -68,24 +68,22 @@ const ondraw = (type) => () => {
   walls.push([])
   
   zone.on(`${type}.draw`, () => {
+    console.log('boop', d3.event.type, d3.clientPoint(zone.node(), d3.event))
     walls[walls.length-1].push(d3.clientPoint(zone.node(), d3.event))
     renderWalls()
   })
   
   renderWalls()
 }
-const onend = (type) => () => {
-  zone.on(`${type}.draw`, null) // clear move listener
+const onend = () => {
+  zone.on('.draw', null) // clear move listener
   const simplified = simplify(walls[walls.length-1], 1)
   walls[walls.length-1] = simplified
   renderWalls()
 }
-zone.on('mousedown.draw', ondraw('mousemove'))
+zone.on('mousedown.draw touchstart.draw', ondraw('mousemove'))
 zone.on('touchstart.draw', ondraw('touchmove'))
-zone.on('mouseup.draw', onend('mousemove'))
-zone.on('touchend.draw', onend('touchmove'))
-zone.on('mouseleave.draw', onend('mousemove'))
-zone.on('touchend.draw', onend('touchmove'))
+zone.on('mouseup.draw touchend.draw mouseleave.draw touchleave.draw', onend)
 
 
 // draw everything on initial render
