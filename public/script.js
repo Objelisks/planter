@@ -57,19 +57,20 @@ const renderWalls = () =>
 
 // setup events for wall drawing
 
-const ondraw = () => {
+const ondraw = (type) => {
   walls.push([])
   
-  zone.on('mousemove.draw', () => {
+  zone.on(`${type}.draw`, () => {
     walls[walls.length-1].push(d3.mouse(zone.node()))
     renderWalls()
   })
   
   renderWalls()
-}sd
-zone.on('mousedown.draw', ondraw)
-zone.on('touchstart.draw', ondraw)
-.on('mouseup.draw', () => {
+}
+zone.on('mousedown.draw', ondraw('mousemove'))
+zone.on('touchstart.draw', ondraw('touchmove'))
+
+zone.on('mouseup.draw', () => {
   zone.on('mousemove.draw', null)
   const simplified = simplify(walls[walls.length-1], 1)
   walls[walls.length-1] = simplified
