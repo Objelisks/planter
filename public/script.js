@@ -59,9 +59,10 @@ const renderWalls = () =>
     .selectAll('.wall')
     .data(walls)
     .join(
-      enter => enter.append('path').classed('wall', true).attr('d', d => line(d)),
-      update => update.attr('d', d => line(d)),
+      enter => enter.append('path').classed('wall', true),
+      update => update,
       exit => exit.remove())
+    .attr('d', d => line(d))
 
 // setup events for wall drawing
 const ondraw = (type) => () => {
@@ -110,11 +111,10 @@ const resize = () => {
   svg = zone.append('svg')
     .attr('width', width)
     .attr('height', height)
-  renderWalls()
+  activePage().render()
 }
 window.addEventListener('resize', resize)
 resize()
 
-zone
-  .data(pageIndex)
-  .join()
+activePage().load()
+activePage().render()
