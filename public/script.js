@@ -54,6 +54,7 @@ touchEvents.forEach((eventName) => {
   })
 })
 
+
 // refresh walls from data
 const renderWalls = () =>
   svg
@@ -84,9 +85,21 @@ const onend = () => {
     renderWalls()
   }
 }
-zone.on('mousedown.draw', ondraw('mousemove'))
-zone.on('touchstart.draw', ondraw('touchmove'))
-zone.on('mouseup.draw touchend.draw mouseleave.draw touchleave.draw', onend)
+
+// a page is load, render, unload
+const wallPage = {
+  load: () => {
+    zone.on('mousedown.draw', ondraw('mousemove'))
+    zone.on('touchstart.draw', ondraw('touchmove'))
+    zone.on('mouseup.draw touchend.draw mouseleave.draw touchleave.draw', onend)
+  },
+  render: () => {
+    
+  },
+  unload: () => {
+    zone.on('.draw', null)
+  }
+}
 
 
 const resize = () => {
