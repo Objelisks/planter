@@ -38,7 +38,7 @@ selection
 
 */
 
-const pages = []
+const pages = ['intro', 'draw', 'plant', 'view']
 
 const line = d3.line()
 const zone = d3.select('.zone')
