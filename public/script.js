@@ -93,7 +93,7 @@ zone.on('mouseup.draw touchend.draw mouseleave.draw touchleave.draw', onend)
 renderWalls()
 
 const resize = () => {
-  svg = zone.append('svg')
+  svg = zone..append('svg')
     .attr('width', window.innerWidth)
     .attr('height', window.innerHeight)
   renderWalls()
