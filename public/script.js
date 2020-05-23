@@ -45,6 +45,14 @@ const svg = zone.append('svg').attr('width', 800).attr('height', 600)
 
 const walls = []
 
+// ignore default touch behavior
+var touchEvents = ['touchstart', 'touchmove', 'touchend']
+touchEvents.forEach((eventName) => {
+  document.body.addEventListener(eventName, (e) => {
+    e.preventDefault()
+  }); 
+})
+
 // refresh walls from data
 const renderWalls = () =>
   svg
@@ -56,7 +64,7 @@ const renderWalls = () =>
       exit => exit.remove())
 
 // setup events for wall drawing
-const ondraw = (type) => {
+const ondraw = (type) => () => {
   walls.push([])
   
   zone.on(`${type}.draw`, () => {
@@ -66,7 +74,7 @@ const ondraw = (type) => {
   
   renderWalls()
 }
-const onend = (type) => {
+const onend = (type) => () => {
   zone.on(`${type}.draw`, null) // clear move listener
   const simplified = simplify(walls[walls.length-1], 1)
   walls[walls.length-1] = simplified
