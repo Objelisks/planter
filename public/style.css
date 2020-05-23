@@ -6,7 +6,6 @@
 
 body {
   font-family: sans-serif;
-  margin: 2em 1em;
   line-height: 1.5em;
 }
 
@@ -25,9 +24,11 @@ footer {
 
 
 .zone {
+  display: block;
   min-width: 600px;
   min-height: 600px;
   border: 1px solid black;
+  margin: 0;
 }
 
 .wall {

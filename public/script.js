@@ -80,9 +80,11 @@ const ondraw = (type) => () => {
 }
 const onend = () => {
   zone.on('mousemove.draw touchmove.draw', null) // clear move listener
-  const simplified = simplify(walls[walls.length-1], 1)
-  walls[walls.length-1] = simplified
-  renderWalls()
+  if(walls.length > 0) {
+    const simplified = simplify(walls[walls.length-1], 1)
+    walls[walls.length-1] = simplified
+    renderWalls()
+  }
 }
 zone.on('mousedown.draw', ondraw('mousemove'))
 zone.on('touchstart.draw', ondraw('touchmove'))
@@ -93,9 +95,10 @@ zone.on('mouseup.draw touchend.draw mouseleave.draw touchleave.draw', onend)
 renderWalls()
 
 const resize = () => {
-  svg = zone..append('svg')
-    .attr('width', window.innerWidth)
-    .attr('height', window.innerHeight)
+  zone.selectAll('svg').remove()
+  svg = zone.append('svg')
+    .attr('width', zone.innerWidth)
+    .attr('height', zone.innerHeight)
   renderWalls()
 }
 window.addEventListener('resize', resize)
