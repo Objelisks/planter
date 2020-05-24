@@ -137,7 +137,6 @@ const setPage = (index) => {
   pageIndex = index
   if(activePage()) {
     activePage().load()
-    activePage().render()
   }
 }
 
