@@ -87,7 +87,7 @@ const onend = () => {
 
 const introPage = {
   load: () => {
-    
+    zone.append('h1').text('Plan(t)s')
   },
   unload: () => {
     
@@ -112,7 +112,7 @@ const plantsPage = {
   unload: () => {}
 }
 
-const pages = [wallPage]
+const pages = [introPage, wallPage]
 let pageIndex = 0
 const activePage = () => pages[pageIndex]
 
