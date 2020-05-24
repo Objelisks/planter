@@ -85,14 +85,21 @@ const onend = () => {
   }
 }
 
+const introPage = {
+  load: () => {
+    
+  },
+  unload: () => {
+    
+  }
+}
+
 // a page is load, render, unload
 const wallPage = {
   load: () => {
     zone.on('mousedown.draw', ondraw('mousemove'))
     zone.on('touchstart.draw', ondraw('touchmove'))
     zone.on('mouseup.draw touchend.draw mouseleave.draw touchleave.draw', onend)
-  },
-  render: () => {
     renderWalls()
   },
   unload: () => {
@@ -102,7 +109,6 @@ const wallPage = {
 
 const plantsPage = {
   load: () => {},
-  render: () => {},
   unload: () => {}
 }
 
@@ -117,7 +123,8 @@ const resize = () => {
   svg = zone.append('svg')
     .attr('width', width)
     .attr('height', height)
-  activePage().render()
+  activePage().unload()
+  activePage().load()
 }
 window.addEventListener('resize', resize)
 resize()
@@ -126,6 +133,7 @@ const setPage = (index) => {
   if(activePage()) {
     activePage().unload()
   }
+  zone.selectAll().remove()
   pageIndex = index
   if(activePage()) {
     activePage().load()
