@@ -100,6 +100,12 @@ const wallPage = {
   }
 }
 
+const plantsPage = {
+  load: () => {},
+  render: () => {},
+  unload: () => {}
+}
+
 const pages = [wallPage]
 let pageIndex = 0
 const activePage = () => pages[pageIndex]
