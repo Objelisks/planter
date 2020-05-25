@@ -42,7 +42,10 @@ body {
 
 .button {
   display: inline-block;
-  padding: 16px;
+  font-size: 16pt;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 20px;
   background-color: black;
   color: white;
 }
