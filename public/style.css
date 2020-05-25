@@ -12,8 +12,6 @@ html {
 body {
   height: 100%;
   margin: 0;
-  pointer-events: auto;
-  cursor: pointer;
 }
 
 .zone {
@@ -41,9 +39,11 @@ body {
   stroke-linecap: round;
 }
 
-.over .button {
+.fgsfds {
   display: inline-block;
   font-size: 16pt;
+  cursor: pointer;
+  cursor: hand;
   font-weight: bold;
   padding: 20px;
   background-color: black;
