@@ -65,8 +65,11 @@ pages.introPage = {
   }
 }
 
-
-let svg = null
+const width = zone.node().getBoundingClientRect().width
+const height = zone.node().getBoundingClientRect().height
+let svg = zone.append('svg')
+  .attr('width', width)
+  .attr('height', height)
 
 // refresh walls from data
 const renderWalls = () =>
