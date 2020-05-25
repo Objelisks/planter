@@ -38,6 +38,8 @@ selection
 
 */
 
+d3.selectAll('*').on('click', () => console.log(d3.event.target))
+
 const line = d3.line()
 const zone = d3.select('.zone')
 const over = d3.select('.over')
@@ -49,7 +51,7 @@ const walls = []
 const touchEvents = ['touchstart', 'touchmove', 'touchend']
 touchEvents.forEach((eventName) => {
   document.body.addEventListener(eventName, (e) => {
-    e.preventDefault()
+    ///e.preventDefault()
   })
 })
 
