@@ -88,6 +88,7 @@ const onend = () => {
 
 const introPage = {
   load: () => {
+    console.log('intro')
     over.append('h1').text('Plan(t)s')
   },
   unload: () => {
@@ -95,7 +96,7 @@ const introPage = {
   }
 }
 
-// a page is load, render, unload
+// a page is load, unload
 const wallPage = {
   load: () => {
     zone.on('mousedown.draw', ondraw('mousemove'))
@@ -117,6 +118,18 @@ const pages = [introPage, wallPage]
 let pageIndex = 0
 const activePage = () => pages[pageIndex]
 
+const setPage = (index = pageIndex) => {
+  if(activePage()) {
+    activePage().unload()
+  }
+  zone.selectAll('*').remove()
+  over.selectAll('*').remove()
+  pageIndex = index
+  if(activePage()) {
+    activePage().load()
+  }
+}
+
 const resize = () => {
   zone.selectAll('svg').remove()
   const width = zone.node().getBoundingClientRect().width
@@ -128,16 +141,3 @@ const resize = () => {
 }
 window.addEventListener('resize', resize)
 resize()
-
-const setPage = (index = pageIndex) => {
-  if(activePage()) {
-    activePage().unload()
-  }
-  zone.selectAll().remove()
-  pageIndex = index
-  if(activePage()) {
-    activePage().load()
-  }
-}
-
-setPage(0)
