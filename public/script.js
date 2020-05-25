@@ -140,7 +140,7 @@ const setPage = (page = activePage) => {
   if(activePage) {
     activePage.unload()
   }
-  zone.selectAll('*').remove()
+  //zone.selectAll('*').remove()
   over.selectAll('*').remove()
   activePage = page
   if(activePage) {
