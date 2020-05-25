@@ -24,18 +24,6 @@ place datatable to the right
 place search bar to the top
 place tools to the top
 big playful controls with transitions
-
-tools:
-layout
-plant
-
-
-d3:
-path
-zoomable
-dragging
-selection
-
 */
 
 // ignore default touch behavior
@@ -51,9 +39,14 @@ const line = d3.line()
 const zone = d3.select('.zone')
 const over = d3.select('.over')
 
+const width = zone.node().getBoundingClientRect().width
+const height = zone.node().getBoundingClientRect().height
+let svg = zone.append('svg')
+  .attr('width', width)
+  .attr('height', height)
+
 let walls = []
 const pages = {}
-
 
 pages.introPage = {
   load: () => {
@@ -64,12 +57,6 @@ pages.introPage = {
     
   }
 }
-
-const width = zone.node().getBoundingClientRect().width
-const height = zone.node().getBoundingClientRect().height
-let svg = zone.append('svg')
-  .attr('width', width)
-  .attr('height', height)
 
 // refresh walls from data
 const renderWalls = () =>
