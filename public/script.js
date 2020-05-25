@@ -100,6 +100,11 @@ const introPage = {
 // a page is load, unload
 const wallPage = {
   load: () => {
+    const width = zone.node().getBoundingClientRect().width
+    const height = zone.node().getBoundingClientRect().height
+    svg = zone.append('svg')
+      .attr('width', width)
+      .attr('height', height)
     zone.on('mousedown.draw', ondraw('mousemove'))
     zone.on('touchstart.draw', ondraw('touchmove'))
     zone.on('mouseup.draw touchend.draw mouseleave.draw touchleave.draw', onend)
@@ -132,12 +137,6 @@ const setPage = (index = pageIndex) => {
 }
 
 const resize = () => {
-  zone.selectAll('svg').remove()
-  const width = zone.node().getBoundingClientRect().width
-  const height = zone.node().getBoundingClientRect().height
-  svg = zone.append('svg')
-    .attr('width', width)
-    .attr('height', height)
   setPage()
 }
 window.addEventListener('resize', resize)

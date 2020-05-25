@@ -43,6 +43,7 @@ body {
   display: inline-block;
   font-size: 16pt;
   font-weight: bold;
+  pointer-events: auto;
   cursor: pointer;
   padding: 20px;
   background-color: black;
