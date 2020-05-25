@@ -12,6 +12,8 @@ html {
 body {
   height: 100%;
   margin: 0;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .zone {
@@ -39,12 +41,10 @@ body {
   stroke-linecap: round;
 }
 
-.button {
+.over .button {
   display: inline-block;
   font-size: 16pt;
   font-weight: bold;
-  pointer-events: auto;
-  cursor: pointer;
   padding: 20px;
   background-color: black;
   color: white;
