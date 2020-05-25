@@ -98,8 +98,6 @@ pages.wallPage = {
     })
     over.append('div').text('done').classed('button', true).on('click', () => setPage(pages.plantsPage))
     
-    const width = zone.node().getBoundingClientRect().width
-    const height = zone.node().getBoundingClientRect().height
     zone
       .on('mousedown.draw', ondraw('mousemove'))
       .on('touchstart.draw', ondraw('touchmove'))
@@ -107,6 +105,7 @@ pages.wallPage = {
     renderWalls()
   },
   unload: () => {
+    zone.on('.draw', null)
   }
 }
 
