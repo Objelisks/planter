@@ -100,9 +100,7 @@ pages.wallPage = {
     
     const width = zone.node().getBoundingClientRect().width
     const height = zone.node().getBoundingClientRect().height
-    svg = zone.append('svg')
-      .attr('width', width)
-      .attr('height', height)
+    zone
       .on('mousedown.draw', ondraw('mousemove'))
       .on('touchstart.draw', ondraw('touchmove'))
       .on('mouseup.draw touchend.draw mouseleave.draw touchleave.draw', onend)
