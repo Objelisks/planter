@@ -50,7 +50,6 @@ touchEvents.forEach((eventName) => {
 const line = d3.line()
 const zone = d3.select('.zone')
 const over = d3.select('.over')
-let svg
 
 let walls = []
 const pages = {}
@@ -66,6 +65,8 @@ pages.introPage = {
   }
 }
 
+
+let svg = null
 
 // refresh walls from data
 const renderWalls = () =>
@@ -123,22 +124,28 @@ pages.wallPage = {
 }
 
 
+let activePlant = null
+
 pages.plantsPage = {
-  load: () => {},
+  load: () => {
+    over.append('div').text('add one').classed('button', true).on('mousedown touchstart', () => activePlant = {})
+    over.append('div').text('done').classed('button', true).on('click', () => setPage(pages.viewPage))
+    renderWalls()
+  },
   unload: () => {}
 }
 
 
-let activePage = null
+let activePage = pages.introPage
 
-const setPage = (index = pageIndex) => {
-  if(activePage {
+const setPage = (page = activePage) => {
+  if(activePage) {
     activePage.unload()
   }
   zone.selectAll('*').remove()
   over.selectAll('*').remove()
-  pageIndex = index
-  if(activePage {
+  activePage = page
+  if(activePage) {
     activePage.load()
   }
 }
