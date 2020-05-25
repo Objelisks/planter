@@ -29,6 +29,7 @@ body {
   height: 90%;
   border: 1px solid black;
   margin-bottom: auto;
+  pointer-events: none;
 }
 
 
@@ -43,6 +44,7 @@ body {
   display: inline-block;
   font-size: 16pt;
   cursor: pointer;
+  pointer-events: auto;
   font-weight: bold;
   padding: 20px;
   background-color: black;

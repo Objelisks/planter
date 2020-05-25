@@ -38,22 +38,33 @@ selection
 
 */
 
-d3.selectAll('*').on('click', () => console.log(d3.event.target))
+// ignore default touch behavior
+const touchEvents = ['touchstart', 'touchmove', 'touchend']
+touchEvents.forEach((eventName) => {
+  document.body.addEventListener(eventName, (e) => {
+    e.preventDefault()
+  })
+})
+
 
 const line = d3.line()
 const zone = d3.select('.zone')
 const over = d3.select('.over')
 let svg
 
-const walls = []
+let walls = []
+const pages = {}
 
-// ignore default touch behavior
-const touchEvents = ['touchstart', 'touchmove', 'touchend']
-touchEvents.forEach((eventName) => {
-  document.body.addEventListener(eventName, (e) => {
-    ///e.preventDefault()
-  })
-})
+
+pages.introPage = {
+  load: () => {
+    over.append('h1').text('Plan(t)s')
+    over.append('div').text('ok ready!!').classed('button', true).on('click', () => setPage(pages.wallPage))
+  },
+  unload: () => {
+    
+  }
+}
 
 
 // refresh walls from data
@@ -88,20 +99,14 @@ const onend = () => {
   }
 }
 
-const introPage = {
+pages.wallPage = {
   load: () => {
-    console.log('intro')
-    over.append('h1').text('Plan(t)s')
-    over.append('div').text('ok ready!!').classed('button', true)
-  },
-  unload: () => {
+    over.append('div').text('clear').classed('button', true).on('click', () => {
+      walls = []
+      renderWalls()
+    })
+    over.append('div').text('done').classed('button', true).on('click', () => setPage(pages.plantsPage))
     
-  }
-}
-
-// a page is load, unload
-const wallPage = {
-  load: () => {
     const width = zone.node().getBoundingClientRect().width
     const height = zone.node().getBoundingClientRect().height
     svg = zone.append('svg')
@@ -117,24 +122,24 @@ const wallPage = {
   }
 }
 
-const plantsPage = {
+
+pages.plantsPage = {
   load: () => {},
   unload: () => {}
 }
 
-const pages = [introPage, wallPage]
-let pageIndex = 0
-const activePage = () => pages[pageIndex]
+
+let activePage = null
 
 const setPage = (index = pageIndex) => {
-  if(activePage()) {
-    activePage().unload()
+  if(activePage {
+    activePage.unload()
   }
   zone.selectAll('*').remove()
   over.selectAll('*').remove()
   pageIndex = index
-  if(activePage()) {
-    activePage().load()
+  if(activePage {
+    activePage.load()
   }
 }
 
