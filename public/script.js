@@ -136,7 +136,6 @@ pages.plantsPage = {
 
 
 let activePage = pages.introPage
-
 const setPage = (page = activePage) => {
   if(activePage) {
     activePage.unload()
