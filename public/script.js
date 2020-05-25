@@ -40,6 +40,7 @@ selection
 
 const line = d3.line()
 const zone = d3.select('.zone')
+const over = d3.select('.over')
 let svg
 
 const walls = []
@@ -87,7 +88,7 @@ const onend = () => {
 
 const introPage = {
   load: () => {
-    zone.append('h1').text('Plan(t)s')
+    over.append('h1').text('Plan(t)s')
   },
   unload: () => {
     
@@ -123,13 +124,12 @@ const resize = () => {
   svg = zone.append('svg')
     .attr('width', width)
     .attr('height', height)
-  activePage().unload()
-  activePage().load()
+  setPage()
 }
 window.addEventListener('resize', resize)
 resize()
 
-const setPage = (index) => {
+const setPage = (index = pageIndex) => {
   if(activePage()) {
     activePage().unload()
   }
