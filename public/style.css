@@ -12,7 +12,6 @@ html {
 body {
   height: 100%;
   margin: 0;
-  cursor: pointer;
 }
 
 .zone {
@@ -44,6 +43,7 @@ body {
   display: inline-block;
   font-size: 16pt;
   font-weight: bold;
+  cursor: pointer;
   padding: 20px;
   background-color: black;
   color: white;
