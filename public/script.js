@@ -90,6 +90,7 @@ const introPage = {
   load: () => {
     console.log('intro')
     over.append('h1').text('Plan(t)s')
+    over.append('div').text('ok ready!!').classed('button', true)
   },
   unload: () => {
     

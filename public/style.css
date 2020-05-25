@@ -2,6 +2,7 @@
 
 * {
   box-sizing: border-box;
+  font-family: sans-serif;
 }
 
 html {
@@ -37,4 +38,11 @@ body {
   stroke: black;
   stroke-width: 4px;
   stroke-linecap: round;
+}
+
+.button {
+  display: inline-block;
+  padding: 16px;
+  background-color: black;
+  color: white;
 }
