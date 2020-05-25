@@ -113,13 +113,12 @@ pages.wallPage = {
     svg = zone.append('svg')
       .attr('width', width)
       .attr('height', height)
-    zone.on('mousedown.draw', ondraw('mousemove'))
-    zone.on('touchstart.draw', ondraw('touchmove'))
-    zone.on('mouseup.draw touchend.draw mouseleave.draw touchleave.draw', onend)
+      .on('mousedown.draw', ondraw('mousemove'))
+      .on('touchstart.draw', ondraw('touchmove'))
+      .on('mouseup.draw touchend.draw mouseleave.draw touchleave.draw', onend)
     renderWalls()
   },
   unload: () => {
-    zone.on('.draw', null)
   }
 }
 
