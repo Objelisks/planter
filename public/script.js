@@ -119,10 +119,14 @@ const spawnPlant = (x, y) => {
   return plantId
 }
 
-const renderPlants = () => svg.selectAll('plant').data(plants).join(
-  enter => enter.append('circle'),
-  update => update,
-  exit => exit.remove())
+const renderPlants = () => svg.selectAll('.plant').data(plants).join(
+    enter => enter.append('circle').classed('plant', true)
+      .on('mousedown, touchstart', () => {
+        console.log('mousedown plant', enter.datum().id)
+        activePlant = enter.datum().id
+      }),
+    update => update,
+    exit => exit.remove())
   .attr('cx', d => d.x)
   .attr('cy', d => d.y)
   .attr('r', d => 10)
@@ -132,10 +136,13 @@ pages.plantsPage = {
     over.append('div').text('add one').classed('button', true).on('mousedown touchstart', () => activePlant = spawnPlant())
     over.append('div').text('done').classed('button', true).on('click', () => setPage(pages.viewPage))
     zone.on('mousemove.plant, touchmove.plant', () => {
-      const point = d3.mouse()
-      plants[activePlant].x = point.x
-      plants[activePlant].y = point.y
-      renderPlants()
+      console.log('move', activePlant, d3.event)
+      if(activePlant !== null) {
+        const point = d3.mouse(zone.node())
+        plants[activePlant].x = point[0]
+        plants[activePlant].y = point[1]
+        renderPlants()
+      }
     })
     zone.on('mouseup.plant touchend.plant mouseleave.plant touchleave.plant', () => {
       activePlant = null
