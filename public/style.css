@@ -49,6 +49,7 @@ body {
   font-size: 16pt;
   cursor: pointer;
   pointer-events: auto;
+  user-select: none;
   font-weight: bold;
   padding: 20px;
   background-color: black;

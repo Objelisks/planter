@@ -92,11 +92,11 @@ const onend = () => {
 
 pages.wallPage = {
   load: () => {
-    over.append('div').text('clear').classed('button', true).on('click', () => {
+    over.append('div').text('clear').classed('button', true).on('click touch', () => {
       walls = []
       renderWalls()
     })
-    over.append('div').text('done').classed('button', true).on('click', () => setPage(pages.plantsPage))
+    over.append('div').text('done').classed('button', true).on('click touch', () => setPage(pages.plantsPage))
     
     zone
       .on('mousedown.draw', ondraw('mousemove'))
@@ -121,8 +121,7 @@ const spawnPlant = (x, y) => {
 
 const renderPlants = () => svg.selectAll('.plant').data(plants).join(
     enter => enter.append('circle').classed('plant', true)
-      .on('mousedown, touchstart', () => {
-        console.log('mousedown plant', enter.datum().id)
+      .on('mousedown touchstart', () => {
         activePlant = enter.datum().id
       }),
     update => update,
@@ -134,11 +133,10 @@ const renderPlants = () => svg.selectAll('.plant').data(plants).join(
 pages.plantsPage = {
   load: () => {
     over.append('div').text('add one').classed('button', true).on('mousedown touchstart', () => activePlant = spawnPlant())
-    over.append('div').text('done').classed('button', true).on('click', () => setPage(pages.viewPage))
+    over.append('div').text('done').classed('button', true).on('click touch', () => setPage(pages.viewPage))
     zone.on('mousemove.plant, touchmove.plant', () => {
-      console.log('move', activePlant, d3.event)
       if(activePlant !== null) {
-        const point = d3.mouse(zone.node())
+        const point = d3.event.type.includes('mouse') ? d3.mouse(zone.node()) : d3.touches(zone.node())[0]
         plants[activePlant].x = point[0]
         plants[activePlant].y = point[1]
         renderPlants()
