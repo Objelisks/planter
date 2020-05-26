@@ -115,7 +115,7 @@ let plants = []
 
 const spawnPlant = (x, y) => {
   const plantId = plants.push({ x, y })
-  plants[plantId].id = plantId
+  plants[plantId-1].id = plantId
   return plantId
 }
 
