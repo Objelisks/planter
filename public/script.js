@@ -116,6 +116,9 @@ pages.plantsPage = {
   load: () => {
     over.append('div').text('add one').classed('button', true).on('mousedown touchstart', () => activePlant = {})
     over.append('div').text('done').classed('button', true).on('click', () => setPage(pages.viewPage))
+    zone.on('mouseup.plant touchend.plant', () => {
+      
+    })
     renderWalls()
   },
   unload: () => {}
@@ -130,6 +133,7 @@ const setPage = (page = activePage) => {
   
   over.selectAll('*').remove()
   activePage = page
+  
   if(activePage) {
     activePage.load()
   }
