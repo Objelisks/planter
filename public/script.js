@@ -111,15 +111,24 @@ pages.wallPage = {
 
 
 let activePlant = null
+let plants = []
+
+const renderPlants = () => svg.selectAll('plant').data(plants).join(
+  enter => enter.append('circle'),
+  update => {},
+  exit => exit.remove()
+)
 
 pages.plantsPage = {
   load: () => {
     over.append('div').text('add one').classed('button', true).on('mousedown touchstart', () => activePlant = {})
     over.append('div').text('done').classed('button', true).on('click', () => setPage(pages.viewPage))
     zone.on('mouseup.plant touchend.plant', () => {
-      
+      plants.push(activePlant)
+      activePlant = null
     })
     renderWalls()
+    renderPlants()
   },
   unload: () => {}
 }
