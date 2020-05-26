@@ -51,7 +51,7 @@ const pages = {}
 pages.introPage = {
   load: () => {
     over.append('h1').text('Plan(t)s')
-    over.append('div').text('ok ready!!').classed('button', true).on('click', () => setPage(pages.wallPage))
+    over.append('div').text('ok ready!!').classed('button', true).on('click touchend', () => setPage(pages.wallPage))
   },
   unload: () => {
     over.selectAll('*').remove()
@@ -95,11 +95,11 @@ const onend = () => {
 
 pages.wallPage = {
   load: () => {
-    over.append('div').text('clear').classed('button', true).on('click touch', () => {
+    over.append('div').text('clear').classed('button', true).on('click touchend', () => {
       walls = []
       renderWalls()
     })
-    over.append('div').text('done').classed('button', true).on('click touch', () => setPage(pages.plantsPage))
+    over.append('div').text('done').classed('button', true).on('click touchend', () => setPage(pages.plantsPage))
     
     zone
       .on('mousedown.draw', ondraw('mousemove'))
@@ -125,38 +125,39 @@ const spawnPlant = (x, y) => {
 
 const renderPlants = () => svg.selectAll('.plant').data(plants).join(
     enter => enter.append('circle').classed('plant', true)
-      .on('mousedown touchstart', () => {
-        console.log(d3.event.type)
-        activePlant = enter.datum().id
-      }),
+      .on('mousedown touchstart', () => activePlant = enter.datum().id),
     update => update,
     exit => exit.remove())
   .attr('cx', d => d.x)
   .attr('cy', d => d.y)
   .attr('r', d => 10)
 
+const plantMove = () => {
+  if(activePlant !== null) {
+    const point = d3.event.type.includes('mouse') ? d3.mouse(zone.node()) : d3.touches(zone.node())[0]
+    plants[activePlant].x = point[0]
+    plants[activePlant].y = point[1]
+    renderPlants()
+  }
+}
+
+const plantEnd = () => {
+  activePlant = null
+  renderPlants()
+}
+
 pages.plantsPage = {
   load: () => {
-    over.append('div').text('add one').classed('button', true).on('mousedown touchstart', () => {
-      console.log(d3.event.type)
-      activePlant = spawnPlant()
-    })
-    over.append('div').text('done').classed('button', true).on('click touch', () => setPage(pages.viewPage))
-    zone.on('mousemove.plant, touchmove.plant touchdrag.plant', () => {
-      if(activePlant !== null) {
-        console.log(d3.event.type)
-        const point = d3.event.type.includes('mouse') ? d3.mouse(zone.node()) : d3.touches(zone.node())[0]
-        plants[activePlant].x = point[0]
-        plants[activePlant].y = point[1]
-        renderPlants()
-      }
-    })
+    // this is kinda weird, maybe i should just put the buttons in svg
+    // the touchmove events on zone don't trigger if touchstart happens on the button
+    over.append('div').text('add one').classed('button', true)
+      .on('mousedown touchstart', () => activePlant = spawnPlant())
+      .on('mousemove touchmove', plantMove)
+      .on('mouseup touchend', plantEnd)
+    over.append('div').text('done').classed('button', true).on('click touchend', () => setPage(pages.viewPage))
+    zone.on('mousemove.plant, touchmove.plant touchdrag.plant', plantMove)
     zone.on('touchcancel', () => console.log(d3.event.type))
-    zone.on('mouseup.plant touchend.plant mouseleave.plant touchleave.plant', () => {
-      console.log(d3.event.type)
-      activePlant = null
-      renderPlants()
-    })
+    zone.on('mouseup.plant touchend.plant mouseleave.plant touchleave.plant', plantEnd)
     renderWalls()
     renderPlants()
   },
