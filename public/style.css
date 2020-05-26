@@ -40,6 +40,10 @@ body {
   stroke-linecap: round;
 }
 
+.plant {
+  fill: green;
+}
+
 .button {
   display: inline-block;
   font-size: 16pt;

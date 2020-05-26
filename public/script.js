@@ -114,8 +114,8 @@ let activePlant = null
 let plants = []
 
 const spawnPlant = (x, y) => {
-  const plantId = plants.push({ x, y })
-  plants[plantId-1].id = plantId
+  const plantId = plants.push({ x, y }) - 1
+  plants[plantId].id = plantId
   return plantId
 }
 
@@ -125,18 +125,28 @@ const renderPlants = () => svg.selectAll('plant').data(plants).join(
   exit => exit.remove())
   .attr('cx', d => d.x)
   .attr('cy', d => d.y)
+  .attr('r', d => 10)
 
 pages.plantsPage = {
   load: () => {
     over.append('div').text('add one').classed('button', true).on('mousedown touchstart', () => activePlant = spawnPlant())
     over.append('div').text('done').classed('button', true).on('click', () => setPage(pages.viewPage))
-    zone.on('mouseup.plant touchend.plant', () => {
+    zone.on('mousemove.plant, touchmove.plant', () => {
+      const point = d3.mouse()
+      plants[activePlant].x = point.x
+      plants[activePlant].y = point.y
+      renderPlants()
+    })
+    zone.on('mouseup.plant touchend.plant mouseleave.plant touchleave.plant', () => {
       activePlant = null
+      renderPlants()
     })
     renderWalls()
     renderPlants()
   },
-  unload: () => {}
+  unload: () => {
+    zone.on('.plant', null)
+  }
 }
 
 
