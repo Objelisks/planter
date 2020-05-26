@@ -123,8 +123,8 @@ const renderPlants = () => svg.selectAll('plant').data(plants).join(
   enter => enter.append('circle'),
   update => update,
   exit => exit.remove())
-  .attr('x', d => d.x)
-  .attr('y', d => d.y)
+  .attr('cx', d => d.x)
+  .attr('cy', d => d.y)
 
 pages.plantsPage = {
   load: () => {
