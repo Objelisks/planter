@@ -45,8 +45,8 @@ let svg = zone.append('svg')
   .attr('width', width)
   .attr('height', height)
 
-let walls = []
 const pages = {}
+
 
 pages.introPage = {
   load: () => {
@@ -54,9 +54,12 @@ pages.introPage = {
     over.append('div').text('ok ready!!').classed('button', true).on('click', () => setPage(pages.wallPage))
   },
   unload: () => {
-    
+    over.selectAll('*').remove()
   }
 }
+
+
+let walls = []
 
 // refresh walls from data
 const renderWalls = () =>
@@ -105,6 +108,7 @@ pages.wallPage = {
     renderWalls()
   },
   unload: () => {
+    over.selectAll('*').remove()
     zone.on('.draw', null)
   }
 }
@@ -122,6 +126,7 @@ const spawnPlant = (x, y) => {
 const renderPlants = () => svg.selectAll('.plant').data(plants).join(
     enter => enter.append('circle').classed('plant', true)
       .on('mousedown touchstart', () => {
+        console.log(d3.event.type)
         activePlant = enter.datum().id
       }),
     update => update,
@@ -132,17 +137,23 @@ const renderPlants = () => svg.selectAll('.plant').data(plants).join(
 
 pages.plantsPage = {
   load: () => {
-    over.append('div').text('add one').classed('button', true).on('mousedown touchstart', () => activePlant = spawnPlant())
+    over.append('div').text('add one').classed('button', true).on('mousedown touchstart', () => {
+      console.log(d3.event.type)
+      activePlant = spawnPlant()
+    })
     over.append('div').text('done').classed('button', true).on('click touch', () => setPage(pages.viewPage))
-    zone.on('mousemove.plant, touchmove.plant', () => {
+    zone.on('mousemove.plant, touchmove.plant touchdrag.plant', () => {
       if(activePlant !== null) {
+        console.log(d3.event.type)
         const point = d3.event.type.includes('mouse') ? d3.mouse(zone.node()) : d3.touches(zone.node())[0]
         plants[activePlant].x = point[0]
         plants[activePlant].y = point[1]
         renderPlants()
       }
     })
+    zone.on('touchcancel', () => console.log(d3.event.type))
     zone.on('mouseup.plant touchend.plant mouseleave.plant touchleave.plant', () => {
+      console.log(d3.event.type)
       activePlant = null
       renderPlants()
     })
@@ -150,6 +161,7 @@ pages.plantsPage = {
     renderPlants()
   },
   unload: () => {
+    over.selectAll('*').remove()
     zone.on('.plant', null)
   }
 }
@@ -161,7 +173,6 @@ const setPage = (page = activePage) => {
     activePage.unload()
   }
   
-  over.selectAll('*').remove()
   activePage = page
   
   if(activePage) {
