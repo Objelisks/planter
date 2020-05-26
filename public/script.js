@@ -114,7 +114,9 @@ let activePlant = null
 let plants = []
 
 const spawnPlant = (x, y) => {
-  return plants.push({ x, y })
+  const plantId = plants.push({ x, y })
+  plants[plantId].id = plantId
+  return plantId
 }
 
 const renderPlants = () => svg.selectAll('plant').data(plants).join(
@@ -128,7 +130,6 @@ pages.plantsPage = {
     over.append('div').text('add one').classed('button', true).on('mousedown touchstart', () => activePlant = spawnPlant())
     over.append('div').text('done').classed('button', true).on('click', () => setPage(pages.viewPage))
     zone.on('mouseup.plant touchend.plant', () => {
-      plants.push(activePlant)
       activePlant = null
     })
     renderWalls()
