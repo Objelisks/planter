@@ -170,7 +170,10 @@ pages.plantsPage = {
 
 pages.viewPage = {
   load: () => {
-    
+    over.append('div').text('edit').classed('button', true).on('click touchend', () => setPage(pages.wallPage))
+    over.append('div').text('list').classed('button', true).on('click touchend', () => setPage(pages.listPage))
+    renderWalls()
+    renderPlants()
   },
   unload: () => {
     
