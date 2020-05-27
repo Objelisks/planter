@@ -130,7 +130,7 @@ const renderPlants = () => svg.selectAll('.plant').data(plants).join(
     exit => exit.remove())
   .attr('cx', d => d.x)
   .attr('cy', d => d.y)
-  .attr('r', d => 10)
+  .attr('r', d => 15)
 
 const plantMove = () => {
   if(activePlant !== null) {
@@ -164,6 +164,16 @@ pages.plantsPage = {
   unload: () => {
     over.selectAll('*').remove()
     zone.on('.plant', null)
+  }
+}
+
+
+pages.viewPage = {
+  load: () => {
+    
+  },
+  unload: () => {
+    
   }
 }
 
