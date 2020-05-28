@@ -152,7 +152,7 @@ pages.plantsPage = {
     // the touchmove events on zone don't trigger if touchstart happens on the button
     over.append('div').text('add one').classed('button', true)
       .on('mousedown touchstart', () => activePlant = spawnPlant())
-      .on('mousemove.plant touchmove.plant', plantMove)
+      .on('mousemove.plant touchmove.plant', () => { console.log('button'); plantMove() })
       .on('mouseup touchend', plantEnd)
     over.append('div').text('done').classed('button', true).on('click touchend', () => setPage(pages.viewPage))
     zone.on('mousemove.plant, touchmove.plant touchdrag.plant', plantMove)
@@ -161,7 +161,7 @@ pages.plantsPage = {
     renderPlants()
   },
   unload: () => {
-    svg.selectAll('.button').on('.plant', null).remove()
+    over.selectAll('.button').on('.plant', null).remove()
     zone.on('.plant', null)
   }
 }
