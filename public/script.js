@@ -155,13 +155,14 @@ pages.plantsPage = {
       .on('mousemove.plant touchmove.plant', () => { console.log('button'); plantMove() })
       .on('mouseup touchend', plantEnd)
     over.append('div').text('done').classed('button', true).on('click touchend', () => setPage(pages.viewPage))
-    zone.on('mousemove.plant, touchmove.plant touchdrag.plant', plantMove)
+    zone.on('mousemove.plant, touchmove.plant touchdrag.plant', () => { console.log('zone'); plantMove() })
     zone.on('mouseup.plant touchend.plant mouseleave.plant touchleave.plant', plantEnd)
     renderWalls()
     renderPlants()
   },
   unload: () => {
     over.selectAll('.button').on('.plant', null).remove()
+    zone.on('mousemove.plant, touchmove.plant touchdrag.plant', null)
     zone.on('.plant', null)
   }
 }
