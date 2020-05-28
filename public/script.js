@@ -161,6 +161,7 @@ pages.plantsPage = {
     renderPlants()
   },
   unload: () => {
+    
     over.selectAll('*').remove()
     over.on('.plant', null)
     zone.on('.plant', null)
