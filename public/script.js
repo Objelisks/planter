@@ -176,7 +176,7 @@ pages.viewPage = {
     renderPlants()
   },
   unload: () => {
-    
+    over.selectAll('*').remove()
   }
 }
 
