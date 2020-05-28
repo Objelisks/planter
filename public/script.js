@@ -152,17 +152,17 @@ pages.plantsPage = {
     // the touchmove events on zone don't trigger if touchstart happens on the button
     over.append('div').text('add one').classed('button', true)
       .on('mousedown touchstart', () => activePlant = spawnPlant())
-      .on('mousemove touchmove', plantMove)
+      .on('mousemove.plant touchmove.plant', plantMove)
       .on('mouseup touchend', plantEnd)
     over.append('div').text('done').classed('button', true).on('click touchend', () => setPage(pages.viewPage))
     zone.on('mousemove.plant, touchmove.plant touchdrag.plant', plantMove)
-    zone.on('touchcancel', () => console.log(d3.event.type))
     zone.on('mouseup.plant touchend.plant mouseleave.plant touchleave.plant', plantEnd)
     renderWalls()
     renderPlants()
   },
   unload: () => {
     over.selectAll('*').remove()
+    over.on('.plant', null)
     zone.on('.plant', null)
   }
 }
