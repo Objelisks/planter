@@ -114,7 +114,9 @@ pages.wallPage = {
 }
 
 
-let activePlant = null
+let dragPlant = null
+let selectPlant = null
+let plantDown = null
 let plants = []
 
 const spawnPlant = (x, y) => {
@@ -125,24 +127,33 @@ const spawnPlant = (x, y) => {
 
 const renderPlants = () => svg.selectAll('.plant').data(plants).join(
     enter => enter.append('circle').classed('plant', true)
-      .on('mousedown touchstart', () => activePlant = enter.datum().id),
+      .on('mousedown touchstart', () => plantDown = enter.datum().id)
+      .on('mouseup touchend', () => selectPlant = enter.datum().id),
     update => update,
     exit => exit.remove())
   .attr('cx', d => d.x)
   .attr('cy', d => d.y)
-  .attr('r', d => 15)
+  .attr('r', () => 15)
+  .classed('selected', d => d.id === selectPlant)
 
 const plantMove = () => {
-  if(activePlant !== null) {
+  if(plantDown && !dragPlant) {
+    dragPlant = plantDown
+  }
+  if(dragPlant !== null) {
     const point = d3.event.type.includes('mouse') ? d3.mouse(zone.node()) : d3.touches(zone.node())[0]
-    plants[activePlant].x = point[0]
-    plants[activePlant].y = point[1]
+    plants[dragPlant].x = point[0]
+    plants[dragPlant].y = point[1]
     renderPlants()
   }
 }
 
 const plantEnd = () => {
-  activePlant = null
+  if(plantDown === null) {
+    selectPlant = null
+  }
+  dragPlant = null
+  plantDown = null
   renderPlants()
 }
 
@@ -151,18 +162,20 @@ pages.plantsPage = {
     // this is kinda weird, maybe i should just put the buttons in svg
     // the touchmove events on zone don't trigger if touchstart happens on the button
     over.append('div').text('add one').classed('button', true)
-      .on('mousedown touchstart', () => activePlant = spawnPlant())
-      .on('mousemove.plant touchmove.plant', () => { console.log('button'); plantMove() })
+      .on('mousedown touchstart', () => plantDown = spawnPlant())
+      .on('mousemove touchmove', plantMove)
       .on('mouseup touchend', plantEnd)
-    over.append('div').text('done').classed('button', true).on('click touchend', () => setPage(pages.viewPage))
-    zone.on('mousemove.plant, touchmove.plant touchdrag.plant', () => { console.log('zone'); plantMove() })
+    over.append('div').text('done').classed('button', true).on('click touchend', () => {
+      dragPlant = null
+      setPage(pages.viewPage)
+    })
+    zone.on('mousemove.plant touchmove.plant touchdrag.plant', plantMove)
     zone.on('mouseup.plant touchend.plant mouseleave.plant touchleave.plant', plantEnd)
     renderWalls()
     renderPlants()
   },
   unload: () => {
-    over.selectAll('.button').on('.plant', null).remove()
-    zone.on('mousemove.plant, touchmove.plant touchdrag.plant', null)
+    over.selectAll('.button').on('.', null).remove()
     zone.on('.plant', null)
   }
 }

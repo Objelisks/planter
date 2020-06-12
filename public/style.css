@@ -44,6 +44,11 @@ body {
   fill: green;
 }
 
+.selected {
+  stroke: black;
+  stroke-width: 2;
+}
+
 .button {
   display: inline-block;
   font-size: 16pt;
