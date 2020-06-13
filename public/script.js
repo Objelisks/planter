@@ -26,6 +26,12 @@ place tools to the top
 big playful controls with transitions
 */
 
+import { introPage } from './pages/intro.js'
+import { wallsPage } from './pages/walls.js'
+import { plantsPage } from './pages/plants.js'
+import { viewPage } from './pages/view.js'
+
+
 // ignore default touch behavior
 const touchEvents = ['touchstart', 'touchmove', 'touchend']
 touchEvents.forEach((eventName) => {
@@ -35,179 +41,35 @@ touchEvents.forEach((eventName) => {
 })
 
 
-const line = d3.line()
-const zone = d3.select('.zone')
-const over = d3.select('.over')
-
-const width = zone.node().getBoundingClientRect().width
-const height = zone.node().getBoundingClientRect().height
-let svg = zone.append('svg')
-  .attr('width', width)
-  .attr('height', height)
-
-const pages = {}
-
-
-pages.introPage = {
-  load: () => {
-    over.append('h1').text('Plan(t)s')
-    over.append('div').text('ok ready!!').classed('button', true).on('click touchend', () => setPage(pages.wallPage))
-  },
-  unload: () => {
-    over.selectAll('*').remove()
-  }
+const pages = {
+  introPage,
+  wallsPage,
+  plantsPage,
+  viewPage
 }
 
 
-let walls = []
-
-// refresh walls from data
-const renderWalls = () =>
-  svg
-    .selectAll('.wall')
-    .data(walls)
-    .join(
-      enter => enter.append('path').classed('wall', true),
-      update => update,
-      exit => exit.remove())
-    .attr('d', d => line(d))
-
-// setup events for wall drawing
-const ondraw = (type) => () => {
-  walls.push([])
-  
-  zone.on(`${type}.draw`, () => {
-    const point = d3.event.type.includes('mouse') ? d3.mouse(zone.node()) : d3.touches(zone.node())[0]
-    walls[walls.length-1].push(point)
-    renderWalls()
-  })
-  
-  renderWalls()
-}
-const onend = () => {
-  zone.on('mousemove.draw touchmove.draw', null) // clear move listener
-  if(walls.length > 0) {
-    const simplified = simplify(walls[walls.length-1], 1)
-    walls[walls.length-1] = simplified
-    renderWalls()
-  }
-}
-
-pages.wallPage = {
-  load: () => {
-    over.append('div').text('clear').classed('button', true).on('click touchend', () => {
-      walls = []
-      renderWalls()
-    })
-    over.append('div').text('done').classed('button', true).on('click touchend', () => setPage(pages.plantsPage))
-    
-    zone
-      .on('mousedown.draw', ondraw('mousemove'))
-      .on('touchstart.draw', ondraw('touchmove'))
-      .on('mouseup.draw touchend.draw mouseleave.draw touchleave.draw', onend)
-    renderWalls()
-  },
-  unload: () => {
-    over.selectAll('*').remove()
-    zone.on('.draw', null)
-  }
-}
-
-
-let dragPlant = null
-let selectPlant = null
-let plantDown = null
-let plants = []
-
-const spawnPlant = (x, y) => {
-  const plantId = plants.push({ x, y }) - 1
-  plants[plantId].id = plantId
-  return plantId
-}
-
-const renderPlants = () => svg.selectAll('.plant').data(plants).join(
-    enter => enter.append('circle').classed('plant', true)
-      .on('mousedown touchstart', () => plantDown = enter.datum().id)
-      .on('mouseup touchend', () => selectPlant = enter.datum().id),
-    update => update,
-    exit => exit.remove())
-  .attr('cx', d => d.x)
-  .attr('cy', d => d.y)
-  .attr('r', () => 15)
-  .classed('selected', d => d.id === selectPlant)
-
-const plantMove = () => {
-  if(plantDown && !dragPlant) {
-    dragPlant = plantDown
-  }
-  if(dragPlant !== null) {
-    const point = d3.event.type.includes('mouse') ? d3.mouse(zone.node()) : d3.touches(zone.node())[0]
-    plants[dragPlant].x = point[0]
-    plants[dragPlant].y = point[1]
-    renderPlants()
-  }
-}
-
-const plantEnd = () => {
-  if(plantDown === null) {
-    selectPlant = null
-  }
-  dragPlant = null
-  plantDown = null
-  renderPlants()
-}
-
-pages.plantsPage = {
-  load: () => {
-    // this is kinda weird, maybe i should just put the buttons in svg
-    // the touchmove events on zone don't trigger if touchstart happens on the button
-    over.append('div').text('add one').classed('button', true)
-      .on('mousedown touchstart', () => plantDown = spawnPlant())
-      .on('mousemove touchmove', plantMove)
-      .on('mouseup touchend', plantEnd)
-    over.append('div').text('done').classed('button', true).on('click touchend', () => {
-      dragPlant = null
-      setPage(pages.viewPage)
-    })
-    zone.on('mousemove.plant touchmove.plant touchdrag.plant', plantMove)
-    zone.on('mouseup.plant touchend.plant mouseleave.plant touchleave.plant', plantEnd)
-    renderWalls()
-    renderPlants()
-  },
-  unload: () => {
-    over.selectAll('.button').on('.', null).remove()
-    zone.on('.plant', null)
-  }
-}
-
-
-pages.viewPage = {
-  load: () => {
-    over.append('div').text('edit').classed('button', true).on('click touchend', () => setPage(pages.wallPage))
-    over.append('div').text('list').classed('button', true).on('click touchend', () => setPage(pages.listPage))
-    renderWalls()
-    renderPlants()
-  },
-  unload: () => {
-    over.selectAll('*').remove()
-  }
-}
-
-
-let activePage = pages.introPage
-const setPage = (page = activePage) => {
+let activePage = null
+const setPage = (page = 'introPage') => {
   if(activePage) {
     activePage.unload()
   }
   
-  activePage = page
+  activePage = pages[page]({ setPage })
   
   if(activePage) {
     activePage.load()
   }
 }
 
+const zone = d3.select('.zone')
+
 const resize = () => {
+  const width = zone.node().getBoundingClientRect().width
+  const height = zone.node().getBoundingClientRect().height
+  zone.select('svg')
+    .attr('width', width)
+    .attr('height', height)
   setPage()
 }
 window.addEventListener('resize', resize)
