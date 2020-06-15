@@ -49,6 +49,10 @@ body {
   stroke-width: 2;
 }
 
+.search {
+  pointer-events: auto;
+}
+
 .button {
   display: inline-block;
   font-size: 16pt;
