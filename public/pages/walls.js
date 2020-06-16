@@ -1,14 +1,16 @@
 /* globals d3, simplify */
 
+import { saveToLocal, getFromLocal } from '../utilities.js'
+
 const zone = d3.select('.zone')
 const over = d3.select('.over')
 const svg = zone.select('svg')
 const line = d3.line()
 
-let walls = []
+let walls = getFromLocal('walls') || []
 
 // refresh walls from data
-const renderWalls = () =>
+export const renderWalls = () =>
   svg
     .selectAll('.wall')
     .data(walls)
@@ -45,7 +47,10 @@ export const wallsPage = ({ setPage }) => ({
       walls = []
       renderWalls()
     })
-    over.append('div').text('done').classed('button', true).on('click touchend', () => setPage('plantsPage'))
+    over.append('div').text('done').classed('button', true).on('click touchend', () => {
+      saveToLocal('walls', walls)
+      setPage('plantsPage')
+    })
     
     zone
       .on('mousedown.draw', ondraw('mousemove'))

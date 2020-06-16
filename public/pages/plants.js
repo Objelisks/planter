@@ -1,19 +1,14 @@
+ import { saveToLocal, getFromLocal } from '../utilities.js'
+ import { select, deselectAll, isSelected } from '../selection.js'
+ import { getPlants } from '../trefle.js'
+
 const zone = d3.select('.zone')
 const over = d3.select('.over')
 const svg = zone.select('svg')
 
-/*
-{"expiration":1592202021,"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6WzQ4LDQ2LDQ4LDQ2LDQ4LDQ2LDQ4XSwiaXNzdWVyX2lkIjo1MDcxLCJvcmlnaW4iOiJsb2NhbGhvc3QiLCJhdWQiOiJKb2tlbiIsImV4cCI6MTU5MjIwMjAyMSwiaWF0IjoxNTkyMTk0ODIxLCJpc3MiOiJKb2tlbiIsImp0aSI6IjJvYzlwZzhhMXQ4cGVocWhsODAwMDNjaCIsIm5iZiI6MTU5MjE5NDgyMX0.crinkgIvnJR0XEyZpAZVPjJIroUV37-_a4sSmZ8lcpY"}
-
-
-*/
-const localhostJWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpcCI6WzQ4LDQ2LDQ4LDQ2LDQ4LDQ2LDQ4XSwiaXNzdWVyX2lkIjo1MDcxLCJvcmlnaW4iOiIqIiwiYXVkIjoiSm9rZW4iLCJleHAiOjE1OTIyMDIyNjIsImlhdCI6MTU5MjE5NTA2MiwiaXNzIjoiSm9rZW4iLCJqdGkiOiIyb2M5cHVhbjUybG1hcGZzOTAwMDAzZDEiLCJuYmYiOjE1OTIxOTUwNjJ9.kowsAVc9O545GGdj7lknU50xo0s0ZksOqb0skWr4m8U'
-const token = 'czVucnQyb2k0dVpGczRGMlpNa2RLdz09'
-const api = (q) => `https://trefle.io/api/plants?token=${localhostJWT}&q=${q}`
-
 let dragPlant = null
 let plantDown = null
-let plants = []
+let plants = getFromLocal('plants') || []
 
 const spawnPlant = (x, y) => {
   const plantId = plants.push({ x, y }) - 1
@@ -22,10 +17,7 @@ const spawnPlant = (x, y) => {
 }
 
 const findMatches = async (search) => {
-  const matches = await fetch(api(search))
-    .then(response => response.json())
-    .then(data => data.map(plant => plant.common_name || plant.scientific_name))
-  console.log(matches)
+  const matches = await getPlants(search)
   d3.select('#searchlist').selectAll('option').data(matches).join('option')
     .attr('value', d => d)
   const input = d3.select('#plantsearch')
@@ -45,16 +37,8 @@ const debounce = (func, ...args) => {
   latestTimeout = setTimeout(() => func(...args), timeout)
 }
 
-const select = (plant) => {
-  plant.selected = true
-}
-
-const deselectAll = () => {
-  zone.selectAll('.selected').each(d => d.selected = false)
-}
-
 const renderInput = () => {
-  over.selectAll('input').data(plants.filter(plant => plant.selected)).join(
+  over.selectAll('input').data(plants.filter(plant => isSelected(plant))).join(
     enter => enter.append('input')
       .attr('id', 'plantsearch')
       .attr('type', 'text')
@@ -63,9 +47,9 @@ const renderInput = () => {
       .attr('placeholder', 'type a plant name...')
       .classed('search', true)
       .attr('value', d => d.name)
-      .on('input', () => {
+      .on('input', (datum) => {
         const newValue = d3.event.target.value
-        enter.datum().name = newValue
+        datum.name = newValue
         if(newValue === "") {
           clearMatches()
         } else {
@@ -77,22 +61,23 @@ const renderInput = () => {
   )
 }
 
-const renderPlants = () => svg.selectAll('.plant').data(plants).join(
+export const renderPlants = () => {
+  svg.selectAll('.plant').data(plants).join(
     enter => enter.append('circle').classed('plant', true)
-      .on('mousedown touchstart', () => {
-        plantDown = enter.datum().id
+      .on('mousedown touchstart', (datum) => {
+        plantDown = datum.id
        })
-      .on('mouseup touchend', () => {
+      .on('mouseup touchend', (datum) => {
         deselectAll()
-        select(enter.datum())
-        render()
+        select(datum)
       }),
     update => update,
     exit => exit.remove())
   .attr('cx', d => d.x)
   .attr('cy', d => d.y)
   .attr('r', () => 15)
-  .classed('selected', d => d.selected)
+  .classed('selected', d => isSelected(d))
+}
 
 const render = () => {
   renderPlants()
@@ -118,6 +103,7 @@ const plantEnd = () => {
 
 export const plantsPage = ({ setPage }) => ({
   load: () => {
+    plantEnd()
     // this is kinda weird, maybe i should just put the buttons in svg
     // the touchmove events on zone don't trigger if touchstart happens on the button
 
@@ -137,6 +123,7 @@ export const plantsPage = ({ setPage }) => ({
       dragPlant = null
       deselectAll()
       render()
+      saveToLocal('plants', plants)
       setPage('viewPage')
     })
     over.append('datalist').attr('id', 'searchlist')
@@ -147,7 +134,9 @@ export const plantsPage = ({ setPage }) => ({
     })
     zone.on('mousemove.plant touchmove.plant touchdrag.plant', plantMove)
     zone.on('mouseup.plant touchend.plant mouseleave.plant touchleave.plant', plantEnd)
-
+    
+    zone.on('selection-change', () => render())
+    
     render()
   },
   unload: () => {
