@@ -51,6 +51,7 @@ export const wallsPage = ({ setPage }) => ({
       saveToLocal('walls', walls)
       setPage('plantsPage')
     })
+    over.append('div').text('draw your space layout with the mouse/touch!')
     
     zone
       .on('mousedown.draw', ondraw('mousemove'))

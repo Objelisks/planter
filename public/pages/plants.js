@@ -113,7 +113,6 @@ export const plantsPage = ({ setPage }) => ({
       .on('mousedown touchstart', () => {
         plantDown = spawnPlant()
         deselectAll()
-        select(plants[plantDown])
         render()
       })
       .on('mousemove touchmove', plantMove)
@@ -128,6 +127,7 @@ export const plantsPage = ({ setPage }) => ({
       setPage('viewPage')
     })
     over.append('datalist').attr('id', 'searchlist')
+    over.append('div').text('drag and drop from the add one button to make plants')
 
     zone.on('mousedown touchstart', () => {
       deselectAll()

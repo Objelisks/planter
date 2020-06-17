@@ -20,7 +20,6 @@ export const viewPage = ({ setPage }) => ({
         deselectAll()
         setPage('wallsPage')
       })
-      over.append('div').text('list').classed('button', true).on('click touchend', () => setPage('listPage'))
       renderWalls()
       renderPlants()
       zone.on('selection-change', () => {
