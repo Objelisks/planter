@@ -66,6 +66,7 @@ export const renderPlants = () => {
     enter => enter.append('circle').classed('plant', true)
       .on('mousedown touchstart', (datum) => {
         plantDown = datum.id
+        d3.event.stopPropagation()
        })
       .on('mouseup touchend', (datum) => {
         deselectAll()
