@@ -18,10 +18,13 @@ const spawnPlant = (x, y) => {
 
 const findMatches = async (search) => {
   const matches = await getPlants(search)
-  d3.select('#searchlist').selectAll('option').data(matches).join('option')
-    .attr('value', d => d)
   const input = d3.select('#plantsearch')
-  input.node().dispatchEvent(new Event('focus'))
+  if(input) {
+    d3.select('#searchlist').selectAll('option').data(matches).join(
+      enter => enter.append('option').attr('value', d => d))
+      
+    input.node().dispatchEvent(new Event('focus'))
+  }
 }
 
 const clearMatches = () => {
@@ -131,12 +134,13 @@ export const plantsPage = ({ setPage }) => ({
     over.append('datalist').attr('id', 'searchlist')
     over.append('div').text('drag and drop from the add one button to make plants')
 
-    zone.on('mousedown.plant touchstart.plant', () => {
+    
+    ;['mousedown.plant', 'touchstart.plant'].forEach(type => zone.on(type, () => {
       deselectAll()
       render()
-    })
-    zone.on('mousemove.plant touchmove.plant touchdrag.plant', plantMove)
-    zone.on('mouseup.plant touchend.plant mouseleave.plant touchleave.plant', plantEnd)
+    }))
+    ;['mousemove.plant', 'touchmove.plant', 'touchdrag.plant'].forEach(type => zone.on(type, plantMove))
+    ;['mouseup.plant', 'touchend.plant', 'mouseleave.plant', 'touchleave.plant'].forEach(type => zone.on(type, plantEnd))
     
     zone.on('selection-change.plant', () => render())
     
@@ -144,6 +148,6 @@ export const plantsPage = ({ setPage }) => ({
   },
   unload: () => {
     over.selectAll('*').on('.', null).remove()
-    zone.on('.', null)
+    zone.on('.plant', null)
   }
 })

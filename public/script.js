@@ -59,7 +59,6 @@ const resize = () => {
   zone.select('svg')
     .attr('width', width)
     .attr('height', height)
-  setPage()
 }
-window.addEventListener('resize', resize)
 resize()
+setPage()

@@ -11,6 +11,6 @@ refreshToken()
 const api = (q) => `https://trefle.io/api/plants?token=${localhostJWT}&q=${q}`
 
 export const getPlants = async (q, retry = 3) => fetch(api(q))
+  .catch(() => retry > 0 ? refreshToken().then(getPlants(q, retry - 1)) : Promise.reject())
   .then(response => response.json())
   .then(data => data.map(plant => plant.common_name || plant.scientific_name))
-  .catch(() => retry > 0 ? refreshToken().then(getPlants(q, retry - 1)) : Promise.reject())
