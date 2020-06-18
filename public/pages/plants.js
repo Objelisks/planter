@@ -111,6 +111,7 @@ export const plantsPage = ({ setPage }) => ({
     // "Add one" button
     over.append('div').text('add one').classed('button', true)
       .on('mousedown touchstart', () => {
+        d3.event.preventDefault()
         plantDown = spawnPlant()
         deselectAll()
         render()
@@ -120,6 +121,7 @@ export const plantsPage = ({ setPage }) => ({
 
     // "Done" button
     over.append('div').text('done').classed('button', true).on('click touchend', () => {
+      d3.event.preventDefault()
       dragPlant = null
       deselectAll()
       render()
@@ -129,19 +131,19 @@ export const plantsPage = ({ setPage }) => ({
     over.append('datalist').attr('id', 'searchlist')
     over.append('div').text('drag and drop from the add one button to make plants')
 
-    zone.on('mousedown touchstart', () => {
+    zone.on('mousedown.plant touchstart.plant', () => {
       deselectAll()
       render()
     })
     zone.on('mousemove.plant touchmove.plant touchdrag.plant', plantMove)
     zone.on('mouseup.plant touchend.plant mouseleave.plant touchleave.plant', plantEnd)
     
-    zone.on('selection-change', () => render())
+    zone.on('selection-change.plant', () => render())
     
     render()
   },
   unload: () => {
     over.selectAll('*').on('.', null).remove()
-    zone.on('.plant', null)
+    zone.on('.', null)
   }
 })

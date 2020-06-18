@@ -44,10 +44,12 @@ const onend = () => {
 export const wallsPage = ({ setPage }) => ({
   load: () => {
     over.append('div').text('clear').classed('button', true).on('click touchend', () => {
+      d3.event.preventDefault()
       walls = []
       renderWalls()
     })
     over.append('div').text('done').classed('button', true).on('click touchend', () => {
+      d3.event.preventDefault()
       saveToLocal('walls', walls)
       setPage('plantsPage')
     })
@@ -60,7 +62,7 @@ export const wallsPage = ({ setPage }) => ({
     renderWalls()
   },
   unload: () => {
-    over.selectAll('*').remove()
+    over.selectAll('*').on('.', null).remove()
     zone.on('.draw', null)
   }
 })

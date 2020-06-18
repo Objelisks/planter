@@ -9,13 +9,19 @@ export const introPage = ({ setPage }) => ({
 
       const plantsData = getFromLocal('plants')
       if(plantsData) {
-        readyButton.on('click touchend', () => setPage('viewPage'))
+        readyButton.on('click touchend', () => {
+          d3.event.preventDefault()
+          setPage('viewPage')
+        })
       } else {
-        readyButton.on('click touchend', () => setPage('wallsPage'))
+        readyButton.on('click touchend', () => {
+          d3.event.preventDefault()
+          setPage('wallsPage')
+        })
       }
     },
     unload: () => {
-      over.selectAll('*').remove()
+      over.selectAll('*').on('.', null).remove()
     }
   })
   

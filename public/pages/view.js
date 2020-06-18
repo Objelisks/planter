@@ -17,16 +17,17 @@ const renderLabel = () => {
 export const viewPage = ({ setPage }) => ({
     load: () => {
       over.append('div').text('edit').classed('button', true).on('click touchend', () => {
+        d3.event.preventDefault()
         deselectAll()
         setPage('wallsPage')
       })
       renderWalls()
       renderPlants()
-      zone.on('selection-change', () => {
+      zone.on('selection-change.view', () => {
         renderPlants()
         renderLabel()
       })
-      zone.on('mousedown touchstart', () => {
+      zone.on('mousedown.view touchstart.view', () => {
         deselectAll()
         renderPlants()
         renderLabel()
@@ -34,6 +35,7 @@ export const viewPage = ({ setPage }) => ({
     },
     unload: () => {
       over.selectAll('*').remove()
+      zone.on('.', null)
     }
   })
   

@@ -31,23 +31,12 @@ import { wallsPage } from './pages/walls.js'
 import { plantsPage } from './pages/plants.js'
 import { viewPage } from './pages/view.js'
 
-
-// ignore default touch behavior
-const touchEvents = ['touchstart', 'touchmove', 'touchend']
-touchEvents.forEach((eventName) => {
-  document.body.addEventListener(eventName, (e) => {
-    e.preventDefault()
-  })
-})
-
-
 const pages = {
   introPage,
   wallsPage,
   plantsPage,
   viewPage
 }
-
 
 let activePage = null
 const setPage = (page = 'introPage') => {
